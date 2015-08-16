@@ -28,7 +28,7 @@ How to
        Add another public key에 등록합니다. 
 4. lisp-korea/onlisp [repo][lispkorea-onlisp-repo] 가져오기
 
-        $ git clone git@github.com:lisp-korea/onlisp.git
+        $ git clone https://github.com/lisp-korea/ClojureProgramming.git
 
 5. git user 설정
 
