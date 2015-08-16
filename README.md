@@ -17,7 +17,7 @@ How to
     * 첫 화면에서 아래 Plans, Pricing and Signup 버튼 클릭
     * Plan & Pricing 화면에서 $0/mo Free for open source 란 Create a free account 버튼 클릭
     * user name, email, password를 등록합니다. 
-2. [lispkorea-onlisp-repo] 접근권한 요청
+2. [lispkorea-ClojurePrgramming-repo] 접근권한 요청
     * 스터디에 참석해서 요청 하거나 게시판에 등록한 github user name을 올려주세요.
     * 지난시간에 못 나오셨지만 참여를 희망하시는 분은 일단 fork 하셔서 작업하시고 pull request 하시기 바랍니다.
 
@@ -26,7 +26,7 @@ How to
     * [Help](http://help.github.com/) 에 가서 "Generating SSH Keys" 항목을 참고하세요
     * 생성된 key를 가신의 계정 Account Settings의 SSH Public Keys ->
        Add another public key에 등록합니다. 
-4. lisp-korea/onlisp [repo][lispkorea-onlisp-repo] 가져오기
+4. lisp-korea/ClojureProgramming [repo][lispkorea-ClojureProgramming-repo] 가져오기
 
         $ git clone https://github.com/lisp-korea/ClojureProgramming.git
 
