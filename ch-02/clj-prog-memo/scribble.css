@@ -1,0 +1,111 @@
+@import  url("scribble-original.css");
+
+// My own overrides
+
+p {
+   font-family: monospace;
+   font-size: 11pt;
+   line-height: 150%;
+   display: block;
+   margin: 1em 0;
+}
+
+p, .SIntrapara {
+  font-family: monospace;
+  display: block;
+  margin: 1em 0;
+}
+
+p table, li table {
+  font-family:  Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console",
+    "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono",
+    "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
+  background: #dee7ec; /* #fafad2;*/
+  margin-left: 1em; 
+  border-style: dashed;
+  border-width:1px;
+  padding: 0.5em;
+}
+
+pre {
+    white-space: pre-wrap;       /* CSS 3 */
+    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+   /* word-wrap: break-word; */      /* Internet Explorer 5.5+ */
+}
+
+pre {
+  font-family:  Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console",
+    "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono",
+    "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
+  background: #dee7ec; /* #fafad2;*/
+  margin-left: 0em; 
+  border-style: dashed;
+  border-width: 1px;
+  padding: 0.5em;
+}
+
+pre span {
+  color: #0000ff;
+/*  font-weight:bold;
+  background-color:#cdc9c9; */
+}
+
+/* section */
+h4 {
+  font-size: 13pt;
+  background: #eee8aa;
+}
+
+/* subsection */
+h5 {
+  font-size: 12pt;
+  background: #E0E0E0;
+}
+
+/* subsubsection */
+h6 {
+  font-size: 11pt;
+  background: #FCF6CF;
+}
+
+h2 { /* per-page main title */
+  margin-top: 0;
+}
+
+h3, h4, h5, h6, h7, h8 {
+  margin-top: 1.75em;
+  margin-bottom: 0.5em;
+}
+
+.codeblock {
+  font-size: 11pt;
+  background-color: #f0f8ff;
+  border-width: 1px;
+  border-style: dashed;
+  padding: 0.5em;
+  left-margin: 0em;
+  line-height: 150%;
+}
+
+.shellblock {
+  font-size: 11pt;
+  background-color: #f5f5f5;
+  border-width: 1px;
+  border-style: dashed;
+  padding: 0.5em;
+  left-margin: 1em;
+  line-height: 150%;
+}
+
+.descblock {
+  font-size: 11pt;
+  background-color: #fffff0;
+  border-width: 1px;
+  border-style: dashed;
+  padding: 0.5em;
+  left-margin: 1em;
+  line-height: 150%;
+}
+
