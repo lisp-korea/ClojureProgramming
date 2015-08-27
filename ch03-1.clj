@@ -456,3 +456,303 @@ sm
 ;= #{10 1000}
 (contains? *1 1239)
 ;= true
+
+(defn compare-magnitude
+  [a b]
+  (let [diff (- (magnitude a) (magnitude b))]
+    (if (zero? diff)
+      (compare a b)
+      diff)))
+(sorted-set-by compare-magnitude 10 1000 500)
+;= #{10 500 1000}
+(conj *1 600)
+;= #{10 500 600 1000}
+(disj *1 750)
+;= #{10 500 600 1000}
+
+(sorted-set-by compare-magnitude 10 1000 500 670 1239)
+;= #{10 500 670 1000 1239}
+(def ss *1)
+;= #'user/ss
+;(subseq ss > 500)
+;= (670 1000 1239)
+;(subseq ss > 500 <= 1000)
+;= (670 1000)
+;(rsubseq ss > 500 <= 1000)
+;= (1000 670)
+
+(defn interpolate
+ "Takes a collection of points (as [x y] tuples), returning a function
+  which is a linear interpolation between those points."
+ [points]
+  (let [results (into (sorted-map) (map vec points))]
+    (fn [x]
+      (let [[xa ya] (first (rsubseq results <= x))
+            [xb yb] (first (subseq results > x))]
+        (if (and xa xb)
+          (/ (+ (* ya (- xb x)) (* yb (- x xa)))
+             (- xb xa))
+          (or ya yb))))))
+          
+(def f (interpolate [[0 0] [10 10] [15 5]]))
+;= #'user/f
+(map f [2 10 12])
+;= (2 10 8)
+
+(get [:a :b :c] 2)
+;= :c
+(get {:a 5 :b 6} :b)
+;= 6
+(get {:a 5 :b 6} :c 7)
+;= 7
+(get #{1 2 3} 3)
+;= 3
+
+([:a :b :c] 2)
+;= :c
+({:a 5 :b 6} :b)
+;= 6
+({:a 5 :b 6} :c 7)
+;= 7
+(#{1 2 3} 3)
+;= 3
+
+;([:a :b :c] -1)
+;= #<IndexOutOfBoundsException java.lang.IndexOutOfBoundsException>
+
+(get {:a 5 :b 6} :b)
+;= 6
+(get {:a 5 :b 6} :c 7)
+;= 7
+(get #{:a :b :c} :d)
+;= nil
+
+(:b {:a 5 :b 6})
+;= 6
+(:c {:a 5 :b 6} 7)
+;= 7
+(:d #{:a :b :c})
+;= nil
+
+(defn get-foo
+  [map]
+  (:foo map))
+;= #'user/get-foo
+(get-foo nil)
+;= nil
+(defn get-bar
+  [map]
+  (map :bar))
+;= #'user/get-bar
+;(get-bar nil)
+;= #<NullPointerException java.lang.NullPointerException>
+
+(map :name [{:age 21 :name "David"}
+            {:gender :f :name "Suzanne"}
+            {:name "Sara" :location "NYC"}])
+;= ("David" "Suzanne" "Sara")
+
+(some #{1 3 7} [0 2 4 5 6])
+;= nil
+(some #{1 3 7} [0 2 3 4 5 6])
+;= 3
+
+(filter :age [{:age 21 :name "David"}
+              {:gender :f :name "Suzanne"}
+              {:name "Sara" :location "NYC"}])
+;= ({:age 21, :name "David"})
+(filter (comp (partial <= 25) :age) [{:age 21 :name "David"}
+                                     {:gender :f :name "Suzanne" :age 20}
+                     {:name "Sara" :location "NYC" :age 34}])
+;= ({:age 34, :name "Sara", :location "NYC"})
+
+(remove #{5 7} (cons false (range 10)))
+;= (false 0 1 2 3 4 6 8 9)
+(remove #{5 7 false} (cons false (range 10)))
+;= (false 0 1 2 3 4 6 8 9)
+
+(remove (partial contains? #{5 7 false}) (cons false (range 10)))
+;= (0 1 2 3 4 6 8 9)
+
+'(1 2 3)
+;= (1 2 3)
+
+'(1 2 (+ 1 2))
+;= (1 2 (+ 1 2))
+
+(list 1 2 (+ 1 2))
+;= (1 2 3)
+
+(vector 1 2 3)
+;= [1 2 3]
+(vec (range 5))
+;= [0 1 2 3 4]
+
+(defn euclidian-division
+  [x y]
+  [(quot x y) (rem x y)])
+(euclidian-division 42 8)
+;= [5 2]
+
+(let [[q r] (euclidian-division 53 7)]
+  (str "53/7 = " q " * 7 + " r))
+;= "53/7 = 7 * 7 + 4"
+
+(def point-3d [42 26 -7])
+(def travel-legs [["LYS" "FRA"] ["FRA" "PHL"] ["PHL" "RDU"]])
+
+#{1 2 3}
+;= #{1 2 3}
+;#{1 2 3 3}
+;= #<IllegalArgumentException java.lang.IllegalArgumentException:
+;=   Duplicate key: 3>
+
+(hash-set :a :b :c :d)
+;= #{:a :c :b :d}
+
+(set [1 6 1 8 3 7 7])
+;= #{1 3 6 7 8}
+
+(apply str (remove (set "aeiouy") "vowels are useless"))
+;= "vwls r slss"
+(defn numeric? [s] (every? (set "0123456789") s))
+;= #'user/numeric?
+(numeric? "123")
+;= true
+(numeric? "42b")
+;= false
+
+{:a 5 :b 6}
+;= {:a 5, :b 6}
+;{:a 5 :a 5}
+;= #<IllegalArgumentException java.lang.IllegalArgumentException:
+;=   Duplicate key: :a>
+
+(hash-map :a 5 :b 6)
+;= {:a 5, :b 6}
+(apply hash-map [:a 5 :b 6])
+;= {:a 5, :b 6}
+
+;; 32page
+(def m {:a 5 :b 6
+:c [7 8 9]
+:d {:e 10 :f 11}
+"foo" 88
+42 false})
+;= #'user/m
+
+(keys m)
+;= (:a :b :c)
+(vals m)
+;= (1 2 3)
+
+(map key m)
+;= (:a :c :b)
+(map val m)
+;= (1 3 2)
+
+(def playlist
+  [{:title "Elephant", :artist "The White Stripes", :year 2003}
+   {:title "Helioself", :artist "Papas Fritas", :year 1997}
+   {:title "Stories from the City, Stories from the Sea",
+    :artist "PJ Harvey", :year 2000}
+   {:title "Buildings and Grounds", :artist "Papas Fritas", :year 2000}
+   {:title "Zen Rodeo", :artist "Mardi Gras BB", :year 2002}])
+
+(map :title playlist)
+;= ("Elephant" "Helioself" "Stories from the City, Stories from the Sea"
+;=  "Buildings and Grounds" "Zen Rodeo")
+
+(defn summarize [{:keys [title artist year]}]
+  (str title " / " artist " / " year))
+  
+(group-by #(rem % 3) (range 10))
+;= {0 [0 3 6 9], 1 [1 4 7], 2 [2 5 8]}
+
+(group-by :artist playlist)
+;= {"Papas Fritas" [{:title "Helioself", :artist "Papas Fritas", :year 1997}
+;=                  {:title "Buildings and Grounds", :artist "Papas Fritas"}]
+;=  ...}
+
+;(into {} (for [[k v] (group-by key-fn coll)]
+;           [k (summarize v)]))
+
+(defn reduce-by
+  [key-fn f init coll]
+   (reduce (fn [summaries x]
+            (let [k (key-fn x)]
+              (assoc summaries k (f (summaries k init) x))))
+    {} coll))
+    
+(def orders
+  [{:product "Clock", :customer "Wile Coyote", :qty 6, :total 300}
+   {:product "Dynamite", :customer "Wile Coyote", :qty 20, :total 5000}
+   {:product "Shotgun", :customer "Elmer Fudd", :qty 2, :total 800}
+   {:product "Shells", :customer "Elmer Fudd", :qty 4, :total 100}
+   {:product "Hole", :customer "Wile Coyote", :qty 1, :total 1000}
+   {:product "Anvil", :customer "Elmer Fudd", :qty 2, :total 300}
+   {:product "Anvil", :customer "Wile Coyote", :qty 6, :total 900}])
+   
+(reduce-by :customer #(+ %1 (:total %2)) 0 orders)
+;= {"Elmer Fudd" 1200, "Wile Coyote" 7200}
+
+(reduce-by :product #(conj %1 (:customer %2)) #{} orders)
+;= {"Anvil" #{"Wile Coyote" "Elmer Fudd"},
+;=  "Hole" #{"Wile Coyote"},
+;=  "Shells" #{"Elmer Fudd"},
+;=  "Shotgun" #{"Elmer Fudd"},
+;=  "Dynamite" #{"Wile Coyote"},
+;=  "Clock" #{"Wile Coyote"}}
+
+(fn [order]
+  [(:customer order) (:product order)])
+#(vector (:customer %) (:product %))
+(fn [{:keys [customer product]}]
+  [customer product])
+(juxt :customer :product)
+
+(reduce-by (juxt :customer :product)
+  #(+ %1 (:total %2)) 0 orders)
+;= {["Wile Coyote" "Anvil"] 900,
+;=  ["Elmer Fudd" "Anvil"] 300,
+;=  ["Wile Coyote" "Hole"] 1000,
+;=  ["Elmer Fudd" "Shells"] 100,
+;=  ["Elmer Fudd" "Shotgun"] 800,
+;=  ["Wile Coyote" "Dynamite"] 5000,
+;=  ["Wile Coyote" "Clock"] 300}
+
+(defn reduce-by-in
+  [keys-fn f init coll]
+  (reduce (fn [summaries x]
+            (let [ks (keys-fn x)]
+              (assoc-in summaries ks
+                (f (get-in summaries ks init) x))))
+    {} coll))
+    
+(reduce-by-in (juxt :customer :product)
+  #(+ %1 (:total %2)) 0 orders)
+;= {"Elmer Fudd" {"Anvil" 300,
+;=                "Shells" 100,
+;=                "Shotgun" 800},
+;=  "Wile Coyote" {"Anvil" 900,
+;=                 "Hole" 1000,
+;=                 "Dynamite" 5000,
+;=                 "Clock" 300}}
+
+(def flat-breakup
+  {["Wile Coyote" "Anvil"] 900,
+   ["Elmer Fudd" "Anvil"] 300,
+   ["Wile Coyote" "Hole"] 1000,
+   ["Elmer Fudd" "Shells"] 100,
+   ["Elmer Fudd" "Shotgun"] 800,
+   ["Wile Coyote" "Dynamite"] 5000,
+   ["Wile Coyote" "Clock"] 300})
+   
+(reduce #(apply assoc-in %1 %2) {} flat-breakup)
+;= {"Elmer Fudd" {"Shells" 100,
+;=                "Anvil" 300,
+;=                "Shotgun" 800},
+;=  "Wile Coyote" {"Hole" 1000,
+;=                 "Dynamite" 5000,
+;=                 "Clock" 300,
+;=                 "Anvil" 900}}
