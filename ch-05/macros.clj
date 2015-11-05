@@ -12,3 +12,18 @@
                     %)
     form))
 
+(comment
+  (reverse-it (nltnirp "foo"))
+  ;;=> foo
+  
+  (reverse-it
+    (qesod [gra (egnar 5)]
+      (nltnirp (cni gra))))
+  ;; 1
+  ;; 2
+  ;; 3
+  ;; 4
+  ;; 5
+  ;; nil
+  )
+
